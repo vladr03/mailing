@@ -1,0 +1,65 @@
+<template>
+    <div class="slds-grid slds-wrap">
+        <div class="slds-size_1-of-1">
+            <lightning-card>
+                <div
+                    class="slds-grid slds-wrap slds-var-p-right_medium slds-var-p-left_medium slds-var-p-bottom_medium">
+                    <template if:true={loading}>
+                        <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+                    </template>
+
+                    <div class="slds-size_1-of-1 slds-align_absolute-center slds-border_bottom">
+                        <div style="font-size:18px; font-weight:100; padding:10px;">
+                            Title
+                        </div>
+                    </div>
+                    <div class="slds-size_1-of-1 slds-var-p-bottom_x-small slds-var-p-top_x-small slds-border_bottom">
+                        <div style="margin-bottom: 15px; font-size: 14px;">
+                            <b>Schedule batch</b>
+                        </div>
+                        <div>
+                            Descriprtion text
+                        </div>
+                        <lightning-input class="slds-var-p-bottom_x-small" type="time" name="time" label="CRON String"
+                            required onchange={handleTimeChange}>
+                        </lightning-input>
+                        <div style="color: #1E90FF	">
+                            <lightning-formatted-url label="Read more about scheduling"
+                                value="https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_scheduler.htm">
+                                
+                            </lightning-formatted-url>
+                        </div>
+                    </div>
+                    <div style="display:flex; justify-content: flex-end;"
+                        class="slds-size_1-of-1 slds-var-p-bottom_x-small slds-var-p-top_x-small">
+                        <div style="margin-right: 5px;">
+                            <lightning-button variant="brand" class="slds-button_brand" label="Run First Job"
+                                name="Run First Job" onclick={runFirstJob}>
+                            </lightning-button>
+                        </div>
+                        <div>
+                            <lightning-button variant="brand" label="Schedule Job" name="Schedule Job"
+                                onclick={scheduleApexJob}>
+                            </lightning-button>
+                        </div>
+                    </div>
+
+                    <!-- <div class="slds-size_1-of-1 slds-var-p-bottom_x-small slds-var-p-top_small">
+                    <h2 class="slds-text-heading_small slds-var-p-bottom_x-small">Currently Scheduled Job</h2>
+                    <template if:true={currentCronAsTime}>
+                        <p class="slds-var-p-bottom_x-small">The job is currently scheduled for:
+                            <lightning-formatted-time class="slds-var-p-left_xx-small" value={currentCronAsTime}>
+                            </lightning-formatted-time>
+                        </p>
+                    </template>
+                    <template if:false={currentCronAsTime}>
+                        <p class="slds-var-p-bottom_x-small">The job is not currently scheduled.</p>
+                    </template>
+                    <lightning-button label="Delete Job" name="Delete Job" onclick={deleteJob}>
+                    </lightning-button>
+                </div> -->
+                </div>
+            </lightning-card>
+        </div>
+    </div>
+</template>
