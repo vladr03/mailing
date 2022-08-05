@@ -20,20 +20,20 @@
                         <div>
                             Descriprtion text
                         </div>
-                        <lightning-input class="slds-var-p-bottom_x-small" type="time" name="time" label="CRON String"
-                            required onchange={handleTimeChange}>
+                        <lightning-input class="slds-var-p-bottom_x-small" label="CRON String" required
+                            onchange={handleTimeChange}>
                         </lightning-input>
+                        <div>{state}</div>
                         <div style="color: #1E90FF	">
                             <lightning-formatted-url label="Read more about scheduling"
                                 value="https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_scheduler.htm">
-                                
                             </lightning-formatted-url>
                         </div>
                     </div>
                     <div style="display:flex; justify-content: flex-end;"
                         class="slds-size_1-of-1 slds-var-p-bottom_x-small slds-var-p-top_x-small">
                         <div style="margin-right: 5px;">
-                            <lightning-button variant="brand" class="slds-button_brand" label="Run First Job"
+                            <lightning-button variant="brand" class="slds-button_brand" label="Run Once"
                                 name="Run First Job" onclick={runFirstJob}>
                             </lightning-button>
                         </div>
@@ -45,7 +45,6 @@
                     </div>
 
                     <!-- <div class="slds-size_1-of-1 slds-var-p-bottom_x-small slds-var-p-top_small">
-                    <h2 class="slds-text-heading_small slds-var-p-bottom_x-small">Currently Scheduled Job</h2>
                     <template if:true={currentCronAsTime}>
                         <p class="slds-var-p-bottom_x-small">The job is currently scheduled for:
                             <lightning-formatted-time class="slds-var-p-left_xx-small" value={currentCronAsTime}>
