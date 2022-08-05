@@ -128,14 +128,13 @@ export default class Manager extends LightningElement {
     }
 
     handleTimeChange(event) {
-        let time = event.target.value;
-        let [hour, minute, seconds] = time.split(":");
-        this.currentCronAsString = `0 ${minute} ${hour} ? * * *`;
+        //let time = event.target.value;
+        //let [hour, minute, seconds] = time.split(":");
+        //this.currentCronAsString = `0 ${minute} ${hour} ? * * *`;
+        this.currentCronAsString = event.target.value;
     }
 
     /**
- * The stopLoading utility is used to control a consistant state experience for the user - it ensures that
- * we don't have a flickering spinner effect when the state is in flux.
  * @param {timeoutValue} timeoutValue
  */
 
