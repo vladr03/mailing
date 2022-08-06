@@ -32,10 +32,12 @@ public with sharing class SchedulingService {
     }
     
     @AuraEnabled
-    public static Boolean scheduleJob(String cronString, String cronJobName) {
+    public static Boolean scheduleJob(String cronString, String cronJobName, String apexClass) {
         try {
-        MailingSchedule scheduler = new MailingSchedule();
-        System.schedule(cronJobName, cronString, scheduler);
+          Type t = Type.forName(apexClass);
+          Schedulable s = (Schedulable) t.newInstance();
+          //MailingSchedule ms = new MailingSchedule();
+        System.schedule(cronJobName, cronString, s);
         return true;
         } catch (Exception e) {
         System.debug(e.getMessage());
@@ -55,5 +57,13 @@ public with sharing class SchedulingService {
       System.debug(e.getMessage());
       return false;
     }
+  }
+
+  @AuraEnabled
+  public static String checkClass(String className) {
+    //ApexClass apexClass = [SELECT Name FROM ApexClass WHERE Name = :className];
+    //return apexClass;
+    String str = [SELECT Name FROM ApexClass WHERE Name = :className].Name;
+    return str;
   }
 }

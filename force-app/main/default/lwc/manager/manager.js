@@ -1,13 +1,16 @@
-import { LightningElement, track } from 'lwc';
+import { LightningElement, track, api } from 'lwc';
 import getCurrentlyScheduleCron from "@salesforce/apex/SchedulingService.getCurrentlyScheduleCron";
 import runFirstJob from "@salesforce/apex/SchedulingService.runFirstJob";
 import checkFirstJobStatus from "@salesforce/apex/SchedulingService.checkFirstJobStatus";
 import scheduleJob from "@salesforce/apex/SchedulingService.scheduleJob";
 import deleteScheduledJob from "@salesforce/apex/SchedulingService.deleteScheduledJob";
+import checkClass from '@salesforce/apex/SchedulingService.checkClass';
 
 export default class Manager extends LightningElement {
     cronJobName = "Job";
-    methodName = "createMailing";
+    @api batchClass = "";
+    @api scheduleClass = "";
+    @api methodName = "createMailing";
     @track currentCronAsTime;
     currentCronAsString;
     state;
@@ -56,12 +59,12 @@ export default class Manager extends LightningElement {
     runFirstJob() {
         this.loading = true;
         runFirstJob({})
-            .then(data => {
-                this.checkFirstSecurityJobStatus();
-            })
-            .catch(error => {
-                this.stopLoading(500);
-            });
+            // .then(data => {
+            //     this.checkFirstSecurityJobStatus();
+            // })
+            // .catch(error => {
+            //     this.stopLoading(500);
+            // });
     }
 
     checkFirstJobStatus() {
@@ -91,30 +94,40 @@ export default class Manager extends LightningElement {
     }
 
     scheduleApexJob() {
+        console.log('schedule', this.scheduleClass);
         this.loading = true;
-        scheduleJob({
-            cronString: this.currentCronAsString,
-            cronJobName: this.cronJobName
-        })
+        //class
+        checkClass({ className: this.scheduleClass })
             .then(data => {
-                console.log(data);
+                console.log('class', data);
+                scheduleJob({
+                    cronString: this.currentCronAsString,
+                    cronJobName: this.cronJobName,
+                    apexClass: data
+                })
+                    .then(data => {
+                        console.log(data);
 
-                if (data) {
-                    this.state = "reschedule";
-                    this.getScheduledCron();
-                    //this.btnClass = 'destructive';
-                    //this.btnLabel = 'Abort Batch';
-                    //this.btnFunc = this.deleteJob;
-                    this.btn2 = "";
-                    this.btn1 = "display:none";
-                    this.isInputDisabled = true;
-                } else {
-                    this.stopLoading(500);
-                    console.log("Unable to Schedule Job1");
-                }
+                        if (data) {
+                            this.state = "reschedule";
+                            this.getScheduledCron();
+                            //this.btnClass = 'destructive';
+                            //this.btnLabel = 'Abort Batch';
+                            //this.btnFunc = this.deleteJob;
+                            this.btn2 = "";
+                            this.btn1 = "display:none";
+                            this.isInputDisabled = true;
+                        } else {
+                            this.stopLoading(500);
+                            console.log("Unable to Schedule Job1");
+                        }
+                    })
+                    .catch(error => {
+                        this.stopLoading(500);
+                        console.log(error.message);
+                    });
             })
             .catch(error => {
-                this.stopLoading(500);
                 console.log(error.message);
             });
     }
