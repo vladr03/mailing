@@ -7,4 +7,10 @@
         <target>lightning__AppPage</target>
         <target>lightning__RecordAction</target>
     </targets>
+    <!-- <targetConfigs>
+        <targetConfig targets="lightning__AppPage">
+
+        </targetConfig>
+
+    </targetConfigs> -->
 </LightningComponentBundle>

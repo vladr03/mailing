@@ -1,4 +1,4 @@
-import { LightningElement, track, api } from 'lwc';
+import { LightningElement, track } from 'lwc';
 import getCurrentlyScheduleCron from "@salesforce/apex/SchedulingService.getCurrentlyScheduleCron";
 import runFirstJob from "@salesforce/apex/SchedulingService.runFirstJob";
 import checkFirstJobStatus from "@salesforce/apex/SchedulingService.checkFirstJobStatus";
@@ -12,6 +12,13 @@ export default class Manager extends LightningElement {
     currentCronAsString;
     state;
     loading;
+    btn1 = "";
+    btn2 = "display:none";
+    isInputDisabled = false;
+
+    //btnLabel = 'Schedule Job';
+    //btnClass = 'brand';
+    //btnFunc = this.scheduleApexJob;
 
     connectedCallback() {
         this.loading = true;
@@ -95,9 +102,15 @@ export default class Manager extends LightningElement {
                 if (data) {
                     this.state = "reschedule";
                     this.getScheduledCron();
+                    //this.btnClass = 'destructive';
+                    //this.btnLabel = 'Abort Batch';
+                    //this.btnFunc = this.deleteJob;
+                    this.btn2 = "";
+                    this.btn1 = "display:none";
+                    this.isInputDisabled = true;
                 } else {
                     this.stopLoading(500);
-                    console.log("Unable to Schedule Job");
+                    console.log("Unable to Schedule Job1");
                 }
             })
             .catch(error => {
@@ -110,15 +123,17 @@ export default class Manager extends LightningElement {
         this.loading = true;
         deleteScheduledJob({ cronJobName: this.cronJobName })
             .then(data => {
-                console.log(data);
+                console.log('data', data);
                 if (data) {
                     this.state = "schedule";
                     this.currentCronAsTime = "";
                     this.stopLoading(500);
+                    this.btn1 = "";
+                    this.btn2 = "display:none";
+                    this.isInputDisabled = false;
                     console.log("Job Deleted");
                 } else {
                     this.stopLoading(100);
-                    console.log("we were unable to delete this job");
                 }
             })
             .catch(error => {
@@ -128,9 +143,6 @@ export default class Manager extends LightningElement {
     }
 
     handleTimeChange(event) {
-        //let time = event.target.value;
-        //let [hour, minute, seconds] = time.split(":");
-        //this.currentCronAsString = `0 ${minute} ${hour} ? * * *`;
         this.currentCronAsString = event.target.value;
     }
 
