@@ -59,12 +59,12 @@ export default class Manager extends LightningElement {
     runFirstJob() {
         this.loading = true;
         runFirstJob({})
-            // .then(data => {
-            //     this.checkFirstSecurityJobStatus();
-            // })
-            // .catch(error => {
-            //     this.stopLoading(500);
-            // });
+            .then(data => {
+                this.checkFirstSecurityJobStatus();
+            })
+            .catch(error => {
+                this.stopLoading(500);
+            });
     }
 
     checkFirstJobStatus() {
