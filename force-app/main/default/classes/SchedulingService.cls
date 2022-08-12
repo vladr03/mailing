@@ -1,7 +1,9 @@
 public with sharing class SchedulingService {
   @AuraEnabled
-  public static void runFirstJob() {
-      SchedulerCreating.createMailing();
+  public static void runFirstJob(String myBatchClass) {
+      Type t = Type.forName(myBatchClass);
+      Database.Batchable<sObject> b = (Database.Batchable<sObject>) t.newInstance();
+      Database.executeBatch(b);
   }
   
   @AuraEnabled
@@ -36,6 +38,7 @@ public with sharing class SchedulingService {
       try {
           Type t = Type.forName(apexClass);
           Schedulable s = (Schedulable) t.newInstance();
+          System.debug('debug ' + s);
           //MailingSchedule ms = new MailingSchedule();
           System.schedule(cronJobName, cronString, s);
           return true;

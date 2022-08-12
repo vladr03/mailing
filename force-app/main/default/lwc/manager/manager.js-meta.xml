@@ -10,7 +10,7 @@
     <targetConfigs>
         <targetConfig targets="lightning__AppPage">
             <property label="Scheduler" name="scheduleClass" type="String" />
-            <!-- <property label="Batch" name="batchClass" type="String" /> -->
+            <property label="Batch" name="batchClass" type="String" />
         </targetConfig>
     </targetConfigs>
 </LightningComponentBundle>

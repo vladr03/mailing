@@ -5,6 +5,8 @@ import checkFirstJobStatus from "@salesforce/apex/SchedulingService.checkFirstJo
 import scheduleJob from "@salesforce/apex/SchedulingService.scheduleJob";
 import deleteScheduledJob from "@salesforce/apex/SchedulingService.deleteScheduledJob";
 import checkClass from '@salesforce/apex/SchedulingService.checkClass';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+
 
 export default class Manager extends LightningElement {
     cronJobName = "Job";
@@ -58,8 +60,14 @@ export default class Manager extends LightningElement {
 
     runFirstJob() {
         this.loading = true;
-        runFirstJob({})
+        runFirstJob({ myBatchClass: this.batchClass })
             .then(data => {
+                const evt = new ShowToastEvent({
+                    title: 'Notification',
+                    message: 'Batch Class is running',
+                    variant: 'success',
+                });
+                this.dispatchEvent(evt);
                 this.checkFirstSecurityJobStatus();
             })
             .catch(error => {
@@ -103,10 +111,10 @@ export default class Manager extends LightningElement {
                 scheduleJob({
                     cronString: this.currentCronAsString,
                     cronJobName: this.cronJobName,
-                    apexClass: data
+                    apexClass: data,
+                    myBatch: this.batchClass
                 })
                     .then(data => {
-                        console.log(data);
 
                         if (data) {
                             this.state = "reschedule";
@@ -114,11 +122,25 @@ export default class Manager extends LightningElement {
                             //this.btnClass = 'destructive';
                             //this.btnLabel = 'Abort Batch';
                             //this.btnFunc = this.deleteJob;
+                            console.log(data);
+                            const evt = new ShowToastEvent({
+                                title: 'Notification',
+                                message: 'Scheduled Job is added',
+                                variant: 'success',
+                            });
+                            this.dispatchEvent(evt);
                             this.btn2 = "";
                             this.btn1 = "display:none";
                             this.isInputDisabled = true;
+
                         } else {
                             this.stopLoading(500);
+                            const evt = new ShowToastEvent({
+                                title: 'Notification',
+                                message: 'Scheduled job has already been added or CRON String is empty',
+                                variant: 'error',
+                            });
+                            this.dispatchEvent(evt);
                             console.log("Unable to Schedule Job1");
                         }
                     })
@@ -145,6 +167,12 @@ export default class Manager extends LightningElement {
                     this.btn2 = "display:none";
                     this.isInputDisabled = false;
                     console.log("Job Deleted");
+                    const evt = new ShowToastEvent({
+                        title: 'Notification',
+                        message: 'Scheduled Job is deleted',
+                        variant: 'success',
+                    });
+                    this.dispatchEvent(evt);
                 } else {
                     this.stopLoading(100);
                 }
