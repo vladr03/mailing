@@ -20,7 +20,6 @@ export default class Manager extends LightningElement {
     btn1 = "";
     btn2 = "display:none";
     isInputDisabled = false;
-
     //btnLabel = 'Schedule Job';
     //btnClass = 'brand';
     //btnFunc = this.scheduleApexJob;
@@ -28,6 +27,12 @@ export default class Manager extends LightningElement {
     connectedCallback() {
         this.loading = true;
         this.getScheduledCron();
+        this.currentCronAsString = sessionStorage.getItem('cron');
+        if (sessionStorage.getItem('cron') != null) {
+            this.isInputDisabled = sessionStorage.getItem('isDisabled');
+            this.btn2 = sessionStorage.getItem('btn2');
+            this.btn1 = sessionStorage.getItem('btn1');
+        }
     }
 
     getScheduledCron() {
@@ -116,7 +121,12 @@ export default class Manager extends LightningElement {
                 })
                     .then(data => {
 
+                        // console.log("field", this.template.querySelector('lightning-input'));
+                        // this.template.querySelector('lightning-input').addEventListener(function () {
+                        //    sessionStorage.setItem('cron', this.currentCronAsString);
+                        // });
                         if (data) {
+
                             this.state = "reschedule";
                             this.getScheduledCron();
                             //this.btnClass = 'destructive';
@@ -132,6 +142,10 @@ export default class Manager extends LightningElement {
                             this.btn2 = "";
                             this.btn1 = "display:none";
                             this.isInputDisabled = true;
+                            sessionStorage.setItem('cron', this.currentCronAsString);
+                            sessionStorage.setItem('btn1', this.btn1);
+                            sessionStorage.setItem('btn2', this.btn2);
+                            sessionStorage.setItem('isDisabled', this.isInputDisabled);
 
                         } else {
                             this.stopLoading(500);
@@ -160,6 +174,10 @@ export default class Manager extends LightningElement {
             .then(data => {
                 console.log('data', data);
                 if (data) {
+                    sessionStorage.removeItem('cron');
+                    sessionStorage.removeItem('btn1');
+                    sessionStorage.removeItem('btn2');
+                    sessionStorage.removeItem('isDisabled');
                     this.state = "schedule";
                     this.currentCronAsTime = "";
                     this.stopLoading(500);

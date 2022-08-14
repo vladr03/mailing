@@ -20,7 +20,7 @@
                         <div>
                             Descriprtion text
                         </div>
-                        <lightning-input disabled={isInputDisabled} class="slds-var-p-bottom_x-small"
+                        <lightning-input id="inputCron" value={currentCronAsString} disabled={isInputDisabled} class="slds-var-p-bottom_x-small"
                             label="CRON String" required onchange={handleTimeChange}>
                         </lightning-input>
                         <div style="color: #1E90FF	">
